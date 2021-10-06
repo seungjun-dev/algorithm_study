@@ -16,34 +16,30 @@ class Solution {
         for(int i=0; i<scoville.length; i++){
             foodQue.add(scoville[i]);
         }
-  
-        // 음식이 하나인 경우
-        if(foodQue.size()==1){
-            firstFood = foodQue.poll();
-            if(firstFood < K) {
-                answer = -1;
-            } else {
-                answer = foodQue.size();
+        
+        while (!foodQue.isEmpty()) {
+    
+            // 큐의 처음 값이 K 보다 높은 경우 답 출력
+            if(foodQue.peek()>=K) {
+                return answer;
             }
-            return answer;
+
+            // 큐 사이즈가 1이고, K 보다 낮은 경우 답 출력
+            if(foodQue.size()==1 && foodQue.peek()<K) {
+                answer = -1;
+                return answer;
+            }
+            
+            // 나머지 경우 새로운 음식 만들기 진행
+            firstFood = foodQue.poll();
+            secondFood = foodQue.poll();
+                
+            mixedFood = firstFood + (secondFood*2);
+            
+            foodQue.offer(mixedFood);
+            answer++;
         }
         
-        while (!foodQue.isEmpty() || answer >= K) {
-            answer++; 
-            
-            if(foodQue.size()>1) {
-                firstFood = foodQue.poll();
-                secondFood = foodQue.poll();
-                
-                mixedFood = firstFood + (secondFood*2);
-            
-                if(mixedFood>K) {
-                    return answer;
-                } else {
-                    foodQue.offer(mixedFood);
-                }
-            }
-        }
         return answer;
     }
 }
